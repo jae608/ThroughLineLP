@@ -22,13 +22,14 @@ table = [[10, 2, 12, 14, 4, 6],
 
 # For an arbitrary NxM table, we would have 2NM variables, of which they are height, length, or error
 # The first NxM are the lengths, then the next N are the heights, and the last N*(M-1) are the errors
+# Adds variables to the passed in model
 def add_errs(table, model):
     n_row = len(table)
     n_col = len(table[0])
 
     # Lengths
     for i in range(n_row*n_col):
-        model.addVar(lb=0.0, ub=float('inf'), vtype=GRB.CONTINUOUS, name='l'+str(i+1))
+        model.addVar(lb=0.0, ub=float('inf'), vtype=GRB.CONTINUOUS)
     # Heights
     for i in range(n_row):
         model.addVar(lb=0.0, ub=float('inf'), vtype=GRB.CONTINUOUS, name='h'+str(i+1))
@@ -37,17 +38,42 @@ def add_errs(table, model):
         model.addVar(lb=0.0, ub=float('inf'), vtype=GRB.CONTINUOUS, name='e'+str(i+1))
 
 
+def addL_const(table, model, eps):
+    n_row = len(table)
+    n_col = len(table[0])
+
+    vars = model.getVars()
+    print(vars)
+    lengths = vars[:len(vars)//2]
+    heights = vars[len(vars)//2:len(vars)//2+n_row]
+    errors = vars[len(vars)//2+n_row:]
+
+    print(lengths)
+    print(heights)
+    print(errors)
+
+    # First get the column adjacency constraints, of which there are 2M*(N-1)
+    for row in range(n_row-1):
+        for col in range(n_col):
+            pass
+            #model.addLConstr(left, sense=GRB.GREATER_EQUAL, rhs=right, name='l'+str(n))
+
 try:
+
+    epsilon = 0.000025
 
     # Create a new model
     m = gp.Model("Solver")
-
+    e1 = m.addVar(lb=0.0, ub=float('inf'), vtype=GRB.CONTINUOUS, name='e1')
+    print(m)
     # Add the variables to our model
     add_errs(table, m)
 
-    # Add the constraints to our model
-    # Do it for both the linear and quadratic constraints seperately
+    print(m)
 
+    # Add the constraints to our model
+    # Do it for both the linear and quadratic constraints separately
+    addL_const(table, m, epsilon)
 
 except gp.GurobiError as e:
     print('Error code ' + str(e.errno) + ': ' + str(e))
