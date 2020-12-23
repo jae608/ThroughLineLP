@@ -41,7 +41,9 @@ def add_errs(table, model):
         model.addVar(lb=0.0, ub=float('inf'), vtype=GRB.CONTINUOUS, name='e'+str(i+1))
 
 
-# Add 2(M-1)(N-1) Linear column boundary constraints
+# Add 2(M-1)(N-1)+(N-1) Linear constraints
+# 2(M-1)(N-1) of these are column boundary, the remaining N-1 are row length constraints
+# Adds constraints to the passed in model
 def addL_const(table, model, eps):
     n_row = len(table)
     n_col = len(table[0])
@@ -84,7 +86,30 @@ def addL_const(table, model, eps):
 
             model.addLConstr(left1, sense=GRB.GREATER_EQUAL, rhs=right1, name='bc'+str(i))
             i = i+1
-            model.addLConstr(left2, sense=GRB.GREATER_EQUAL, rhs=right2, name='bc' + str(i))
+            model.addLConstr(left2, sense=GRB.GREATER_EQUAL, rhs=right2, name='bc'+str(i))
+            i = i+1
+
+    i = 1
+    # Get row lengths constraints
+    for row in range(n_row - 1):
+        l_len = lengths[row*(n_row):(row+1)*(n_row)]
+        l_err = errors[row*(n_row-1):(row+1)*(n_row-1)]
+        left = gp.LinExpr()
+        for var in l_len:
+            left.add(var)
+        for var in l_err:
+            left.add(var)
+
+        r_len = lengths[(row+1) * (n_row):(row + 2) * (n_row)]
+        r_err = errors[(row+1) * (n_row - 1):(row + 2) * (n_row - 1)]
+        right = gp.LinExpr()
+        for var in r_len:
+            right.add(var)
+        for var in r_err:
+            right.add(var)
+
+        m.addLConstr(left, sense=GRB.EQUAL, rhs=right, name='lc'+str(i))
+        i = i + 1
 
 try:
 
@@ -101,6 +126,8 @@ try:
     # Do it for both the linear and quadratic constraints separately
     addL_const(table, m, epsilon)
     m.presolve()
+    # Now add the quadratic constraints
+
 
     print(m)
 
