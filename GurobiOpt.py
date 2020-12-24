@@ -60,12 +60,12 @@ def addL_const(table, model, eps):
     for row in range(n_row-1):
         for col in range(1, n_col):
             # Initialize a,b,c,d
-            a = lengths[row*n_row:col+row*n_row]
-            a.extend(errors[row*(n_row-1):row*(n_row-1)+(col)])
-            b = lengths[col+row*n_row]
-            c = lengths[(row+1)*n_row:col+(row+1)*n_row]
-            c.extend(errors[(row+1)*(n_row-1):(row+1)*(n_row-1)+(col)])
-            d = lengths[col+(row+1)*n_row]
+            a = lengths[row*n_col:col+row*n_col]
+            a.extend(errors[row*(n_col-1):row*(n_col-1)+(col)])
+            b = lengths[col+row*n_col]
+            c = lengths[(row+1)*n_col:col+(row+1)*n_col]
+            c.extend(errors[(row+1)*(n_col-1):(row+1)*(n_col-1)+(col)])
+            d = lengths[col+(row+1)*n_col]
 
             # Make our left and right sides for both equations
             left1 = gp.LinExpr(b)
@@ -111,12 +111,54 @@ def addL_const(table, model, eps):
         m.addLConstr(left, sense=GRB.EQUAL, rhs=right, name='lc'+str(i))
         i = i + 1
 
+
+# Add NM quadratic constraints which fix the area for each cell. This requires setting NonConvex to 2
+def addQ_const(table, model):
+    n_row = len(table)
+    n_col = len(table[0])
+
+    vars = model.getVars()
+    lengths = vars[:len(vars) // 2]
+    heights = vars[len(vars) // 2:len(vars) // 2 + n_row]
+    errors = vars[len(vars) // 2 + n_row:]
+
+    # We add NM Quadratic constraints.
+    # These are the ones which will ensure the area of each cell is constant
+    count = 1
+    for i in range(n_row):
+        for j in range(n_col):
+            right = gp.LinExpr(table[i][j])
+            left = gp.QuadExpr(heights[i]*lengths[(i*n_col)+j])
+            model.addQConstr(left, sense=GRB.EQUAL, rhs=right, name='q'+str(count))
+            count = count + 1
+
+
+# Add the objective function. This will just be the sum of each error cell
+def addObj(table, model):
+    n_row = len(table)
+    n_col = len(table[0])
+
+    vars = model.getVars()
+    lengths = vars[:len(vars) // 2]
+    heights = vars[len(vars) // 2:len(vars) // 2 + n_row]
+    errors = vars[len(vars) // 2 + n_row:]
+
+    exp = gp.QuadExpr()
+    for i in range(n_row):
+        for j in range(n_col-1):
+            exp.add(heights[i]*errors[(i*(n_col-1))+j])
+    print(exp)
+    model.setObjective(exp, sense=GRB.MINIMIZE)
+
+
 try:
 
     epsilon = 0.000025
 
     # Create a new model
     m = gp.Model("Solver")
+
+    m.setParam(GRB.Param.NonConvex, 2)
 
     # Add the variables to our model
     add_errs(table, m)
@@ -126,10 +168,16 @@ try:
     # Do it for both the linear and quadratic constraints separately
     addL_const(table, m, epsilon)
     m.presolve()
+
     # Now add the quadratic constraints
+    addQ_const(table, m)
+    m.presolve()
 
+    # Lastly add the objective
+    addObj(table, m)
+    m.presolve()
 
-    print(m)
+    m.printStats()
 
 except gp.GurobiError as e:
     print('Error code ' + str(e.errno) + ': ' + str(e))
