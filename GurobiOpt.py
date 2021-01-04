@@ -23,6 +23,15 @@ table = [[25, 10, 5],
 #          [15, 11, 7, 3, 17, 10]]
 
 
+# Normalize Table size
+def normalize(table):
+    s = sum([sum(row) for row in table])
+    for row in range(len(table)):
+        for col in range(len(table[row])):
+            table[row][col] = table[row][col]/s
+    return table
+
+
 # For an arbitrary NxM table, we would have 2NM variables, of which they are height, length, or error
 # The first NxM are the lengths, then the next N are the heights, and the last N*(M-1) are the errors
 # Adds variables to the passed in model
@@ -41,7 +50,7 @@ def add_errs(table, model):
         model.addVar(lb=0.0, ub=float('inf'), vtype=GRB.CONTINUOUS, name='e'+str(i+1))
 
 
-# Add 2(M-1)(N-1)+(N-1) Linear constraints
+# Add 2(M-1)(N-1)+(N-1)+1 Linear constraints
 # 2(M-1)(N-1) of these are column boundary, the remaining N-1 are row length constraints
 # Adds constraints to the passed in model
 def addL_const(table, model, eps):
@@ -111,6 +120,12 @@ def addL_const(table, model, eps):
         m.addLConstr(left, sense=GRB.EQUAL, rhs=right, name='lc'+str(i))
         i = i + 1
 
+    # Lastly add constraint so the height of our table is 1
+    left = gp.LinExpr()
+    for item in heights:
+        left.add(item)
+    m.addLConstr(left, sense=GRB.EQUAL, rhs=1, name='hc')
+
 
 # Add NM quadratic constraints which fix the area for each cell. This requires setting NonConvex to 2
 def addQ_const(table, model):
@@ -147,7 +162,6 @@ def addObj(table, model):
     for i in range(n_row):
         for j in range(n_col-1):
             exp.add(heights[i]*errors[(i*(n_col-1))+j])
-    print(exp)
     model.setObjective(exp, sense=GRB.MINIMIZE)
 
 
@@ -155,9 +169,12 @@ try:
 
     epsilon = 0.000025
 
+    normalize(table)
+
     # Create a new model
     m = gp.Model("Solver")
 
+    # Must do this so that our non-convex quadratic constraints can be used
     m.setParam(GRB.Param.NonConvex, 2)
 
     # Add the variables to our model
@@ -177,7 +194,17 @@ try:
     addObj(table, m)
     m.presolve()
 
-    m.printStats()
+    # Optimize our model
+    m.optimize()
+
+    # Display results
+    for v in m.getVars():
+        print('%s %g' % (v.varName, v.x))
+
+    print('Obj: %g' % m.objVal)
+
+    # Write results to a csv so they can be visualized
+
 
 except gp.GurobiError as e:
     print('Error code ' + str(e.errno) + ': ' + str(e))
