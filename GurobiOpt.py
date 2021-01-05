@@ -1,10 +1,11 @@
 import gurobipy as gp
 from gurobipy import GRB
+import csv
 
 #  It is assumed we can parse a csv file into an array of N rows and M columns
-table = [[25, 10, 5],
-         [5, 10, 25],
-         [10, 5, 5]]
+# table = [[25, 10, 5],
+#          [5, 10, 25],
+#          [10, 5, 5]]
 # table = [[2, 3, 4, 5],
 #          [4, 7, 2, 8],
 #          [8, 5, 3, 3],
@@ -15,12 +16,12 @@ table = [[25, 10, 5],
 #          [6, 14, 9, 4, 3],
 #          [2, 3, 11, 10, 10],
 #          [7, 3, 3, 18, 5]]
-# table = [[10, 2, 12, 14, 4, 6],
-#          [3, 5, 1, 15, 19, 9],
-#          [8, 18, 1, 14, 17, 3],
-#          [13, 4, 14, 10, 2, 3],
-#          [8, 16, 20, 4, 1, 19],
-#          [15, 11, 7, 3, 17, 10]]
+table = [[10, 2, 12, 14, 4, 6],
+         [3, 5, 1, 15, 19, 9],
+         [8, 18, 1, 14, 17, 3],
+         [13, 4, 14, 10, 2, 3],
+         [8, 16, 20, 4, 1, 19],
+         [15, 11, 7, 3, 17, 10]]
 
 
 # Normalize Table size
@@ -117,6 +118,9 @@ def addL_const(table, model, eps):
         for var in r_err:
             right.add(var)
 
+        print(left)
+        print(right)
+
         m.addLConstr(left, sense=GRB.EQUAL, rhs=right, name='lc'+str(i))
         i = i + 1
 
@@ -204,7 +208,73 @@ try:
     print('Obj: %g' % m.objVal)
 
     # Write results to a csv so they can be visualized
+    vars = m.getVars()
+    n_col = len(table[0])
+    n_row = len(table)
+    lengths = vars[:len(vars) // 2]
+    heights = vars[len(vars) // 2:len(vars) // 2 + n_row]
+    errors = vars[len(vars) // 2 + n_row:]
 
+    # Construct data into an array to return. Each row represents the data for one rectangle
+    # Aquire y offsets
+    yoff = [0] * (n_col + (n_col - 1))
+    for i in range(0, len(heights)):
+        yoff.extend([heights[i].x + yoff[(n_col + (n_col - 1)) * i]] * (n_col + (n_col - 1)))
+
+    # Aquire Heights
+    h = []
+    for val in heights:
+        h.extend([val.x] * (n_col + (n_col - 1)))
+
+    # Aquire lengths
+    l = []
+    for i in range(n_row):
+        for j in range(n_col):
+            l.append(lengths[j+i*n_col].x)
+            if j == n_col - 1:
+                break
+            l.append(errors[(n_col - 1) * i + j].x)
+
+    # Aquire x offsets
+    xoff = [0]
+    for i in range(1, len(l)):
+        if i % (n_col + n_col - 1) == 0:
+            xoff.append(0)
+        else:
+            xoff.append(l[i - 1] + xoff[i - 1])
+
+    # Aquire column number
+    c = []
+    for i in range(n_row):
+        for j in range(2 * n_col - 1):
+            if j % 2 == 1:
+                c.append(-1)
+            else:
+                c.append(j % 6)
+
+    # Build our data
+    data = [['height', 'length', 'xoff', 'yoff', 'col']]
+    for i in range((n_row * n_col) + (n_row * (n_col - 1))):
+        temp = []
+        temp.append(h[i])
+        temp.append(l[i])
+        temp.append(xoff[i])
+        temp.append(yoff[i])
+        temp.append(c[i])
+        data.append(temp)
+
+    # Write data into csv
+    with open('mosek_LP.csv', mode='w') as mosekLP:
+        mosek_writer = csv.writer(mosekLP, delimiter=',')
+        for row in data:
+            mosek_writer.writerow(row)
+
+    # # Display total error
+    # e_sum = 0
+    # for e in range(len(errors)):
+    #     i = e//(n_col-1)
+    #     e_sum = e_sum + errors[e].x * heights[i].x
+    # print("The Total Error Is: " + str(e_sum))
 
 except gp.GurobiError as e:
     print('Error code ' + str(e.errno) + ': ' + str(e))

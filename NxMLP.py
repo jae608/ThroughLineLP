@@ -3,6 +3,9 @@ import mosek
 import csv
 
 #  It is assumed we can parse a csv file into an array of N rows and M columns
+# table = [[25, 10, 5],
+#          [5, 10, 25],
+#          [10, 5, 5]]
 # table = [[2, 3, 4, 5],
 #          [4, 7, 2, 8],
 #          [8, 5, 3, 3],
