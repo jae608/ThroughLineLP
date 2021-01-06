@@ -254,7 +254,7 @@ def sum_err(my_table):
 ##################################
 
 
-epsilon = 0.000025
+epsilon = 0
 top_to_bottom = False
 
 # Read in table
@@ -279,6 +279,8 @@ my_table = to_table(my_table, row_col[1])
 ######################### LOOP BELOW
 p_err = sum_err(my_table)
 while(True):
+
+    print(p_err)
 
     # Generate a list of potential errors to reduce
     potential_errors = make_errs(my_table, top_to_bottom)
