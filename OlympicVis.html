@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>1992-2016 Olympics Medal Totals</title>
+    <script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+    <h3 style="padding-left: 50px;">1992-2016 Olympics Medal Totals</h3>
+    <div id='my_chart'></div>
+</body>
+    <script type="text/javascript">
+		var dataset;
+
+		//Read the data
+		d3.csv("line_tab.csv").then(function(data) {
+			dataset = data;
+			generateVisualization(dataset);
+		});
+
+		function generateVisualization(dataset){
+
+            // format the data
+            dataset.forEach(function(d) {
+                d.l1x = parseFloat(d.l1x);
+                d.l1y = parseFloat(d.l1y);
+                d.l2x = parseFloat(d.l2x);
+                d.l2y = parseFloat(d.l2y);
+                d.l3x = parseFloat(d.l3x);
+                d.l3y = parseFloat(d.l3y);
+                d.l4x = parseFloat(d.l4x);
+                d.l4y = parseFloat(d.l4y);
+                d.l5x = parseFloat(d.l5x);
+                d.l5y = parseFloat(d.l5y);
+                d.l6x = parseFloat(d.l6x);
+                d.l6y = parseFloat(d.l6y);
+                d.l7x = parseFloat(d.l7x);
+                d.l7y = parseFloat(d.l7y);
+                d.l8x = parseFloat(d.l8x);
+                d.l8y = parseFloat(d.l8y);
+                d.l9x = parseFloat(d.l9x);
+                d.l9y = parseFloat(d.l9y);
+                d.l10x = parseFloat(d.l10x);
+                d.l10y = parseFloat(d.l10y);
+
+            });
+
+		    // set the dimensions and margins of the graph
+            var margin = {top: 20, right: 20, bottom: 30, left: 50},
+            width = 960 - margin.left - margin.right,
+            height = 960 - margin.top - margin.bottom;
+
+            //Scales
+            var x = d3.scaleLinear()
+					    .domain([0, 2])
+					    .range([0, width]);
+			var y = d3.scaleLinear()
+					    .domain([0, 2])
+					    .range([0, height]);
+
+            console.log(dataset)
+
+            // define the 10 lines
+            var line1 = d3.line()
+                .curve(d3.curveBasis)
+                .x(function(d) { return x(d.l1x); })
+                .y(function(d) { return y(d.l1y); });
+
+            var line2 = d3.line()
+                .curve(d3.curveBasis)
+                .x(function(d) { return x(d.l2x); })
+                .y(function(d) { return y(d.l2y); });
+
+            var line3 = d3.line()
+                .curve(d3.curveBasis)
+                .x(function(d) { return x(d.l3x); })
+                .y(function(d) { return y(d.l3y); });
+
+            var line4 = d3.line()
+                .curve(d3.curveBasis)
+                .x(function(d) { return x(d.l4x); })
+                .y(function(d) { return y(d.l4y); });
+
+            var line5 = d3.line()
+                .curve(d3.curveBasis)
+                .x(function(d) { return x(d.l5x); })
+                .y(function(d) { return y(d.l5y); });
+
+            var line6 = d3.line()
+                .curve(d3.curveBasis)
+                .x(function(d) { return x(d.l6x); })
+                .y(function(d) { return y(d.l6y); });
+
+            var line7 = d3.line()
+                .curve(d3.curveBasis)
+                .x(function(d) { return x(d.l7x); })
+                .y(function(d) { return y(d.l7y); });
+
+            var line8 = d3.line()
+                .curve(d3.curveBasis)
+                .x(function(d) { return x(d.l8x); })
+                .y(function(d) { return y(d.l8y); });
+
+            var line9 = d3.line()
+                .curve(d3.curveBasis)
+                .x(function(d) { return x(d.l9x); })
+                .y(function(d) { return y(d.l9y); });
+
+            var line10 = d3.line()
+                .curve(d3.curveBasis)
+                .x(function(d) { return x(d.l10x); })
+                .y(function(d) { return y(d.l10y); });
+
+            // append the svg obgect to the body of the page
+            // appends a 'group' element to 'svg'
+            // moves the 'group' element to the top left margin
+            var svg = d3.select("body").append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform",
+                "translate(" + margin.left + "," + margin.top + ")");
+
+            // Add the 10 lines
+            svg.append("path")
+                .data([dataset])
+                .attr("class", "line")
+                .attr("d", line1)
+                .attr("stroke", "black")
+                .attr("fill", "#8dd3c7");
+
+            svg.append("path")
+                .data([dataset])
+                .attr("class", "line")
+                .attr("d", line2)
+                .attr("stroke", "black")
+                .attr("fill", "#ffffb3");
+
+            svg.append("path")
+                .data([dataset])
+                .attr("class", "line")
+                .attr("d", line3)
+                .attr("stroke", "black")
+                .attr("fill", "#bebada");
+
+            svg.append("path")
+                .data([dataset])
+                .attr("class", "line")
+                .attr("d", line4)
+                .attr("stroke", "black")
+                .attr("fill", "#fb8072");
+
+            svg.append("path")
+                .data([dataset])
+                .attr("class", "line")
+                .attr("d", line5)
+                .attr("stroke", "black")
+                .attr("fill", "#80b1d3");
+
+            svg.append("path")
+                .data([dataset])
+                .attr("class", "line")
+                .attr("d", line6)
+                .attr("stroke", "black")
+                .attr("fill", "#fdb462");
+
+            svg.append("path")
+                .data([dataset])
+                .attr("class", "line")
+                .attr("d", line7)
+                .attr("stroke", "black")
+                .attr("fill", "#b3de69");
+
+            svg.append("path")
+                .data([dataset])
+                .attr("class", "line")
+                .attr("d", line8)
+                .attr("stroke", "black")
+                .attr("fill", "#fccde5");
+
+            svg.append("path")
+                .data([dataset])
+                .attr("class", "line")
+                .attr("d", line9)
+                .attr("stroke", "black")
+                .attr("fill", "#d9d9d9");
+
+            svg.append("path")
+                .data([dataset])
+                .attr("class", "line")
+                .attr("d", line10)
+                .attr("stroke", "black")
+                .attr("fill", "#bc80bd");
+
+
+
+
+		}
+
+    </script>
+</html>

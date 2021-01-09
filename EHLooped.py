@@ -1,5 +1,5 @@
 import csv
-import copy
+import time as t
 
 # Note there is a fringe case when the length of a cell is equal to epsilon that I don't want to deal with
 
@@ -255,6 +255,7 @@ def sum_err(my_table):
 
 
 epsilon = 0
+time_limit = 50
 top_to_bottom = False
 
 # Read in table
@@ -278,6 +279,7 @@ my_table = to_table(my_table, row_col[1])
 
 ######################### LOOP BELOW
 p_err = sum_err(my_table)
+time = t.perf_counter()
 while(True):
 
     print(p_err)
@@ -296,12 +298,16 @@ while(True):
                 my_table[row][cell][3] = my_table[row - 1][cell][3] + my_table[row - 1][cell][0]
     if p_err == sum_err(my_table):
         # We are done
-        print(potential_errors)
         # Display the total error (in area) that is occupied
+        print("Heuristic Finished Under Time Limit")
         print("The Total Error Is: "+str(p_err))
         break
     else:
         p_err = sum_err(my_table)
+        if t.perf_counter() - time > time_limit:
+            print("Time Limit Reached")
+            print("The Total Error Is: " + str(p_err))
+            break
 ######################### LOOP ABOVE
 
 # Write table into CSV, overwriting the old one
