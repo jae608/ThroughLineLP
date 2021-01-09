@@ -19,6 +19,14 @@
 		});
 
 		function generateVisualization(){
+
+		    // create a list of keys
+            var keys = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18]
+            var color = d3.scaleOrdinal()
+                .domain(keys)
+                .range(["#8dd3c7", "#ffffb3", "#bebada", "#fb8072", "#80b1d3", "#fdb462", "#b3de69", "#fccde5", "#d9d9d9", "#bc80bd"]);
+
+
             //Design of svg
             var svg = d3.select("body")
 							.append("svg")
@@ -48,17 +56,12 @@
 					    .attr("stroke", "black")
 		                .attr("fill", function(d) {
 		                    if (d.col==-1){
-		                        return "red";
+		                        return "white";
 		                    }
-		                    else if (d.col==0){
-		                        return "green";
+		                    else {
+		                        return color(d.col);
 		                    }
-		                    else if (d.col==2){
-		                        return "blue";
-		                    }
-		                    else if (d.col==4){
-		                        return "orange";
-		                    }
+
 		                });
 
 		}

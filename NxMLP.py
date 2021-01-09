@@ -362,8 +362,6 @@ def to_Line(data):
     return result
 
 
-
-
 # call the main function
 try:
     result = main(table, 0)  # Bug occurs when picking high values of epsilon

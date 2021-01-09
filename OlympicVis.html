@@ -62,52 +62,52 @@
 
             // define the 10 lines
             var line1 = d3.line()
-                .curve(d3.curveBasis)
+                //.curve(d3.curveBasis)
                 .x(function(d) { return x(d.l1x); })
                 .y(function(d) { return y(d.l1y); });
 
             var line2 = d3.line()
-                .curve(d3.curveBasis)
+                //.curve(d3.curveBasis)
                 .x(function(d) { return x(d.l2x); })
                 .y(function(d) { return y(d.l2y); });
 
             var line3 = d3.line()
-                .curve(d3.curveBasis)
+                //.curve(d3.curveBasis)
                 .x(function(d) { return x(d.l3x); })
                 .y(function(d) { return y(d.l3y); });
 
             var line4 = d3.line()
-                .curve(d3.curveBasis)
+                //.curve(d3.curveBasis)
                 .x(function(d) { return x(d.l4x); })
                 .y(function(d) { return y(d.l4y); });
 
             var line5 = d3.line()
-                .curve(d3.curveBasis)
+                //.curve(d3.curveBasis)
                 .x(function(d) { return x(d.l5x); })
                 .y(function(d) { return y(d.l5y); });
 
             var line6 = d3.line()
-                .curve(d3.curveBasis)
+                //.curve(d3.curveBasis)
                 .x(function(d) { return x(d.l6x); })
                 .y(function(d) { return y(d.l6y); });
 
             var line7 = d3.line()
-                .curve(d3.curveBasis)
+                //.curve(d3.curveBasis)
                 .x(function(d) { return x(d.l7x); })
                 .y(function(d) { return y(d.l7y); });
 
             var line8 = d3.line()
-                .curve(d3.curveBasis)
+                //.curve(d3.curveBasis)
                 .x(function(d) { return x(d.l8x); })
                 .y(function(d) { return y(d.l8y); });
 
             var line9 = d3.line()
-                .curve(d3.curveBasis)
+                //.curve(d3.curveBasis)
                 .x(function(d) { return x(d.l9x); })
                 .y(function(d) { return y(d.l9y); });
 
             var line10 = d3.line()
-                .curve(d3.curveBasis)
+                //.curve(d3.curveBasis)
                 .x(function(d) { return x(d.l10x); })
                 .y(function(d) { return y(d.l10y); });
 
@@ -191,6 +191,37 @@
                 .attr("d", line10)
                 .attr("stroke", "black")
                 .attr("fill", "#bc80bd");
+
+        // create a list of keys
+        var keys = ["Australia", "China", "France", "Germany", "Italy", "Japan", "Russia", "South Korea", "United Kingdom", "United States"]
+
+        // Usually you have a color scale in your chart already
+        var color = d3.scaleOrdinal()
+          .domain(keys)
+          .range(["#8dd3c7", "#ffffb3", "#bebada", "#fb8072", "#80b1d3", "#fdb462", "#b3de69", "#fccde5", "#d9d9d9", "#bc80bd"]);
+
+        // Add one dot in the legend for each name.
+        svg.selectAll("mydots")
+          .data(keys)
+          .enter()
+          .append("circle")
+            .attr("cx", 500)
+            .attr("cy", function(d,i){ return 50 + i*25}) // 100 is where the first dot appears. 25 is the distance between dots
+            .attr("r", 7)
+            .attr("stroke", "black")
+            .style("fill", function(d){ return color(d)})
+
+        // Add one dot in the legend for each name.
+        svg.selectAll("mylabels")
+          .data(keys)
+          .enter()
+          .append("text")
+            .attr("x", 520)
+            .attr("y", function(d,i){ return 50 + i*25}) // 100 is where the first dot appears. 25 is the distance between dots
+            .style("fill", "black")
+            .text(function(d){ return d})
+            .attr("text-anchor", "left")
+            .style("alignment-baseline", "middle")
 
 
 

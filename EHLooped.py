@@ -249,6 +249,68 @@ def sum_err(my_table):
                 tot_err += my_table[row][col][0] * my_table[row][col][1]
     return tot_err
 
+
+def to_Line(data):
+    result = []
+    header = ["l1x", "l1y", "l2x", "l2y", "l3x", "l3y", "l4x", "l4y", "l5x", "l5y",
+              "l6x", "l6y", "l7x", "l7y", "l8x", "l8y", "l9x", "l9y", "l10x", "l10y"]
+
+    # First Identify How many columns there are
+    data = data[1:]
+    n_col = 0
+    i = 0
+    while(True):
+        if data[i][4] != -1:
+            if data[i+1][4] == -1:
+                n_col = n_col + 1
+            else:
+                n_col = n_col + 1
+                break
+        i = i + 1
+
+    n_row = (len(data)//(n_col+n_col-1))
+    n_pt = (n_row*4)+1
+    # First loop for the left side
+    for j in range((n_pt-1)//4):
+        top_left = []
+        bot_left = []
+        c_row = data[(n_col+n_col-1)*j:((n_col+n_col-1)*j)+(n_col+n_col-1)]
+        for cell in c_row:
+            if cell[4] == -1:
+                continue
+            else:
+                top_left.append(cell[2])
+                top_left.append(cell[3])
+                bot_left.append(cell[2])
+                bot_left.append(cell[3]+cell[0])
+        result.append(top_left)
+        result.append(bot_left)
+
+    # Loop for the right side
+    for j in range(((n_pt-1)//4)-1, -1, -1):
+        top_right = []
+        bot_right = []
+        c_row = data[(n_col+n_col-1)*j:((n_col+n_col-1)*j)+(n_col+n_col-1)]
+        for cell in c_row:
+            if cell[4] == -1:
+                continue
+            else:
+                bot_right.append(cell[2]+cell[1])
+                bot_right.append(cell[3]+cell[0])
+                top_right.append(cell[2]+cell[1])
+                top_right.append(cell[3])
+        result.append(bot_right)
+        result.append(top_right)
+
+    # Add closing line
+    clo = [item for item in result[0]]
+    result.append(clo)
+
+    result.insert(0, header)
+
+    return result
+
+
 ##################################
 ###############MAIN###############
 ##################################
@@ -318,3 +380,16 @@ with open('mosek_LP.csv', mode='w') as mosekLP:
     for row in my_table:
         for cell in row:
             mosek_writer.writerow(cell)
+t = []
+for row in my_table:
+    for item in row:
+        t.append(item)
+t.insert(0, [['height', 'length', 'xoff', 'yoff', 'col']])
+
+# Additional csv for better drawing
+res_mod = to_Line(t)
+with open('line_tab.csv', mode='w') as mosekLP:
+    mosek_writer = csv.writer(mosekLP, delimiter=',')
+    for row in res_mod:
+        mosek_writer.writerow(row)
+

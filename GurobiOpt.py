@@ -131,16 +131,16 @@ def addL_const(table, model, eps):
     i = 1
     # Get row lengths constraints
     for row in range(n_row - 1):
-        l_len = lengths[row*(n_row):(row+1)*(n_row)]
-        l_err = errors[row*(n_row-1):(row+1)*(n_row-1)]
+        l_len = lengths[row*(n_col):(row+1)*(n_col)]
+        l_err = errors[row*(n_col-1):(row+1)*(n_col-1)]
         left = gp.LinExpr()
         for var in l_len:
             left.add(var)
         for var in l_err:
             left.add(var)
 
-        r_len = lengths[(row+1) * (n_row):(row + 2) * (n_row)]
-        r_err = errors[(row+1) * (n_row - 1):(row + 2) * (n_row - 1)]
+        r_len = lengths[(row+1) * (n_col):(row + 2) * (n_col)]
+        r_err = errors[(row+1) * (n_col - 1):(row + 2) * (n_col - 1)]
         right = gp.LinExpr()
         for var in r_len:
             right.add(var)
@@ -195,6 +195,67 @@ def addObj(table, model):
     model.setObjective(exp, sense=GRB.MINIMIZE)
 
 
+def to_Line(data):
+    result = []
+    header = ["l1x", "l1y", "l2x", "l2y", "l3x", "l3y", "l4x", "l4y", "l5x", "l5y",
+              "l6x", "l6y", "l7x", "l7y", "l8x", "l8y", "l9x", "l9y", "l10x", "l10y"]
+
+    # First Identify How many columns there are
+    data = data[1:]
+    n_col = 0
+    i = 0
+    while(True):
+        if data[i][4] != -1:
+            if data[i+1][4] == -1:
+                n_col = n_col + 1
+            else:
+                n_col = n_col + 1
+                break
+        i = i + 1
+
+    n_row = (len(data)//(n_col+n_col-1))
+    n_pt = (n_row*4)+1
+    # First loop for the left side
+    for j in range((n_pt-1)//4):
+        top_left = []
+        bot_left = []
+        c_row = data[(n_col+n_col-1)*j:((n_col+n_col-1)*j)+(n_col+n_col-1)]
+        for cell in c_row:
+            if cell[4] == -1:
+                continue
+            else:
+                top_left.append(cell[2])
+                top_left.append(cell[3])
+                bot_left.append(cell[2])
+                bot_left.append(cell[3]+cell[0])
+        result.append(top_left)
+        result.append(bot_left)
+
+    # Loop for the right side
+    for j in range(((n_pt-1)//4)-1, -1, -1):
+        top_right = []
+        bot_right = []
+        c_row = data[(n_col+n_col-1)*j:((n_col+n_col-1)*j)+(n_col+n_col-1)]
+        for cell in c_row:
+            if cell[4] == -1:
+                continue
+            else:
+                bot_right.append(cell[2]+cell[1])
+                bot_right.append(cell[3]+cell[0])
+                top_right.append(cell[2]+cell[1])
+                top_right.append(cell[3])
+        result.append(bot_right)
+        result.append(top_right)
+
+    # Add closing line
+    clo = [item for item in result[0]]
+    result.append(clo)
+
+    result.insert(0, header)
+
+    return result
+
+
 try:
 
     epsilon = 0
@@ -206,7 +267,7 @@ try:
 
     # Must do this so that our non-convex quadratic constraints can be used
     m.setParam(GRB.Param.NonConvex, 2)
-    m.Params.TimeLimit = 180.0
+    m.Params.TimeLimit = 60.0
 
     # Add the variables to our model
     add_errs(table, m)
@@ -291,6 +352,13 @@ try:
     with open('mosek_LP.csv', mode='w') as mosekLP:
         mosek_writer = csv.writer(mosekLP, delimiter=',')
         for row in data:
+            mosek_writer.writerow(row)
+
+    # Additional csv for better drawing
+    res_mod = to_Line(data)
+    with open('line_tab.csv', mode='w') as mosekLP:
+        mosek_writer = csv.writer(mosekLP, delimiter=',')
+        for row in res_mod:
             mosek_writer.writerow(row)
 
     # # Display total error
