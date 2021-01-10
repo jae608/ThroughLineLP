@@ -304,7 +304,9 @@ def main(t, eps):
 def to_Line(data):
     result = []
     header = ["l1x", "l1y", "l2x", "l2y", "l3x", "l3y", "l4x", "l4y", "l5x", "l5y",
-              "l6x", "l6y", "l7x", "l7y", "l8x", "l8y", "l9x", "l9y", "l10x", "l10y"]
+              "l6x", "l6y", "l7x", "l7y", "l8x", "l8y", "l9x", "l9y", "l10x", "l10y",
+              "l11x", "l11y", "l12x", "l12y", "l13x", "l13y", "l14x", "l14y", "l15x", "l15y",
+              "l16x", "l16y", "l17x", "l17y", "l18x", "l18y", "l19x", "l19y", "l20x", "l20y"]
 
     # First Identify How many columns there are
     data = data[1:]
@@ -323,39 +325,23 @@ def to_Line(data):
     n_pt = (n_row*4)+1
     # First loop for the left side
     for j in range((n_pt-1)//4):
-        top_left = []
-        bot_left = []
+        top = []
+        bot = []
         c_row = data[(n_col+n_col-1)*j:((n_col+n_col-1)*j)+(n_col+n_col-1)]
         for cell in c_row:
             if cell[4] == -1:
                 continue
             else:
-                top_left.append(cell[2])
-                top_left.append(cell[3])
-                bot_left.append(cell[2])
-                bot_left.append(cell[3]+cell[0])
-        result.append(top_left)
-        result.append(bot_left)
-
-    # Loop for the right side
-    for j in range(((n_pt-1)//4)-1, -1, -1):
-        top_right = []
-        bot_right = []
-        c_row = data[(n_col+n_col-1)*j:((n_col+n_col-1)*j)+(n_col+n_col-1)]
-        for cell in c_row:
-            if cell[4] == -1:
-                continue
-            else:
-                bot_right.append(cell[2]+cell[1])
-                bot_right.append(cell[3]+cell[0])
-                top_right.append(cell[2]+cell[1])
-                top_right.append(cell[3])
-        result.append(bot_right)
-        result.append(top_right)
-
-    # Add closing line
-    clo = [item for item in result[0]]
-    result.append(clo)
+                top.append(cell[2])
+                top.append(cell[3])
+                top.append(cell[2] + cell[1])
+                top.append(cell[3])
+                bot.append(cell[2])
+                bot.append(cell[3]+cell[0])
+                bot.append(cell[2] + cell[1])
+                bot.append(cell[3] + cell[0])
+        result.append(top)
+        result.append(bot)
 
     result.insert(0, header)
 

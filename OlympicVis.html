@@ -42,6 +42,26 @@
                 d.l9y = parseFloat(d.l9y);
                 d.l10x = parseFloat(d.l10x);
                 d.l10y = parseFloat(d.l10y);
+                d.l11x = parseFloat(d.l11x);
+                d.l11y = parseFloat(d.l11y);
+                d.l12x = parseFloat(d.l12x);
+                d.l12y = parseFloat(d.l12y);
+                d.l13x = parseFloat(d.l13x);
+                d.l13y = parseFloat(d.l13y);
+                d.l14x = parseFloat(d.l14x);
+                d.l14y = parseFloat(d.l14y);
+                d.l15x = parseFloat(d.l15x);
+                d.l15y = parseFloat(d.l15y);
+                d.l16x = parseFloat(d.l16x);
+                d.l16y = parseFloat(d.l16y);
+                d.l17x = parseFloat(d.l17x);
+                d.l17y = parseFloat(d.l17y);
+                d.l18x = parseFloat(d.l18x);
+                d.l18y = parseFloat(d.l18y);
+                d.l19x = parseFloat(d.l19x);
+                d.l19y = parseFloat(d.l19y);
+                d.l20x = parseFloat(d.l20x);
+                d.l20y = parseFloat(d.l20y);
 
             });
 
@@ -60,56 +80,116 @@
 
             console.log(dataset)
 
-            // define the 10 lines
-            var line1 = d3.line()
-                //.curve(d3.curveBasis)
-                .x(function(d) { return x(d.l1x); })
+            // define the 20 lines
+            var line1 = d3.area()
+                .curve(d3.curveBasis)
+                .x1(function(d) { return x(d.l1x); })
+                .x0(function(d) { return x(d.l2x); })
                 .y(function(d) { return y(d.l1y); });
-
-            var line2 = d3.line()
-                //.curve(d3.curveBasis)
-                .x(function(d) { return x(d.l2x); })
+            var line2 = d3.area()
+                .curve(d3.curveBasis)
+                .x1(function(d) { return x(d.l2x); })
+                .x0(function(d) { return x(d.l1x); })
                 .y(function(d) { return y(d.l2y); });
 
-            var line3 = d3.line()
-                //.curve(d3.curveBasis)
-                .x(function(d) { return x(d.l3x); })
+            var line3 = d3.area()
+                .curve(d3.curveBasis)
+                .x1(function(d) { return x(d.l3x); })
+                .x0(function(d) { return x(d.l4x); })
                 .y(function(d) { return y(d.l3y); });
-
-            var line4 = d3.line()
-                //.curve(d3.curveBasis)
-                .x(function(d) { return x(d.l4x); })
+            var line4 = d3.area()
+                .curve(d3.curveBasis)
+                .x1(function(d) { return x(d.l4x); })
+                .x0(function(d) { return x(d.l3x); })
                 .y(function(d) { return y(d.l4y); });
 
-            var line5 = d3.line()
-                //.curve(d3.curveBasis)
-                .x(function(d) { return x(d.l5x); })
+            var line5 = d3.area()
+                .curve(d3.curveBasis)
+                .x1(function(d) { return x(d.l5x); })
+                .x0(function(d) { return x(d.l6x); })
                 .y(function(d) { return y(d.l5y); });
-
-            var line6 = d3.line()
-                //.curve(d3.curveBasis)
-                .x(function(d) { return x(d.l6x); })
+            var line6 = d3.area()
+                .curve(d3.curveBasis)
+                .x1(function(d) { return x(d.l6x); })
+                .x0(function(d) { return x(d.l5x); })
                 .y(function(d) { return y(d.l6y); });
 
-            var line7 = d3.line()
-                //.curve(d3.curveBasis)
-                .x(function(d) { return x(d.l7x); })
+            var line7 = d3.area()
+                .curve(d3.curveBasis)
+                .x1(function(d) { return x(d.l7x); })
+                .x0(function(d) { return x(d.l8x); })
                 .y(function(d) { return y(d.l7y); });
-
-            var line8 = d3.line()
-                //.curve(d3.curveBasis)
-                .x(function(d) { return x(d.l8x); })
+            var line8 = d3.area()
+                .curve(d3.curveBasis)
+                .x1(function(d) { return x(d.l8x); })
+                .x0(function(d) { return x(d.l7x); })
                 .y(function(d) { return y(d.l8y); });
 
-            var line9 = d3.line()
-                //.curve(d3.curveBasis)
-                .x(function(d) { return x(d.l9x); })
+            var line9 = d3.area()
+                .curve(d3.curveBasis)
+                .x1(function(d) { return x(d.l9x); })
+                .x0(function(d) { return x(d.l10x); })
                 .y(function(d) { return y(d.l9y); });
-
-            var line10 = d3.line()
-                //.curve(d3.curveBasis)
-                .x(function(d) { return x(d.l10x); })
+            var line10 = d3.area()
+                .curve(d3.curveBasis)
+                .x1(function(d) { return x(d.l10x); })
+                .x0(function(d) { return x(d.l9x); })
                 .y(function(d) { return y(d.l10y); });
+
+            var line11 = d3.area()
+                .curve(d3.curveBasis)
+                .x1(function(d) { return x(d.l11x); })
+                .x0(function(d) { return x(d.l12x); })
+                .y(function(d) { return y(d.l11y); });
+            var line12 = d3.area()
+                .curve(d3.curveBasis)
+                .x1(function(d) { return x(d.l12x); })
+                .x0(function(d) { return x(d.l11x); })
+                .y(function(d) { return y(d.l12y); });
+
+            var line13 = d3.area()
+                .curve(d3.curveBasis)
+                .x1(function(d) { return x(d.l13x); })
+                .x0(function(d) { return x(d.l14x); })
+                .y(function(d) { return y(d.l13y); });
+            var line14 = d3.area()
+                .curve(d3.curveBasis)
+                .x1(function(d) { return x(d.l14x); })
+                .x0(function(d) { return x(d.l13x); })
+                .y(function(d) { return y(d.l14y); });
+
+            var line15 = d3.area()
+                .curve(d3.curveBasis)
+                .x1(function(d) { return x(d.l15x); })
+                .x0(function(d) { return x(d.l16x); })
+                .y(function(d) { return y(d.l15y); });
+            var line16 = d3.area()
+                .curve(d3.curveBasis)
+                .x1(function(d) { return x(d.l16x); })
+                .x0(function(d) { return x(d.l15x); })
+                .y(function(d) { return y(d.l16y); });
+
+            var line17 = d3.area()
+                .curve(d3.curveBasis)
+                .x1(function(d) { return x(d.l17x); })
+                .x0(function(d) { return x(d.l18x); })
+                .y(function(d) { return y(d.l17y); });
+            var line18 = d3.area()
+                .curve(d3.curveBasis)
+                .x1(function(d) { return x(d.l18x); })
+                .x0(function(d) { return x(d.l17x); })
+                .y(function(d) { return y(d.l18y); });
+
+            var line19 = d3.area()
+                .curve(d3.curveBasis)
+                .x1(function(d) { return x(d.l19x); })
+                .x0(function(d) { return x(d.l20x); })
+                .y(function(d) { return y(d.l19y); });
+            var line20 = d3.area()
+                .curve(d3.curveBasis)
+                .x1(function(d) { return x(d.l20x); })
+                .x0(function(d) { return x(d.l19x); })
+                .y(function(d) { return y(d.l20y); });
 
             // append the svg obgect to the body of the page
             // appends a 'group' element to 'svg'
@@ -121,108 +201,141 @@
             .attr("transform",
                 "translate(" + margin.left + "," + margin.top + ")");
 
-            // Add the 10 lines
+            // Add the 20 lines
             svg.append("path")
                 .data([dataset])
                 .attr("class", "line")
                 .attr("d", line1)
                 .attr("stroke", "black")
                 .attr("fill", "#8dd3c7");
-
             svg.append("path")
                 .data([dataset])
                 .attr("class", "line")
                 .attr("d", line2)
                 .attr("stroke", "black")
-                .attr("fill", "#ffffb3");
+                .attr("fill", "#8dd3c7");
 
             svg.append("path")
                 .data([dataset])
                 .attr("class", "line")
                 .attr("d", line3)
                 .attr("stroke", "black")
-                .attr("fill", "#bebada");
-
+                .attr("fill", "#ffffb3");
             svg.append("path")
                 .data([dataset])
                 .attr("class", "line")
                 .attr("d", line4)
                 .attr("stroke", "black")
-                .attr("fill", "#fb8072");
+                .attr("fill", "#ffffb3");
 
             svg.append("path")
                 .data([dataset])
                 .attr("class", "line")
                 .attr("d", line5)
                 .attr("stroke", "black")
-                .attr("fill", "#80b1d3");
-
+                .attr("fill", "#bebada");
             svg.append("path")
                 .data([dataset])
                 .attr("class", "line")
                 .attr("d", line6)
                 .attr("stroke", "black")
-                .attr("fill", "#fdb462");
+                .attr("fill", "#bebada");
 
             svg.append("path")
                 .data([dataset])
                 .attr("class", "line")
                 .attr("d", line7)
                 .attr("stroke", "black")
-                .attr("fill", "#b3de69");
-
+                .attr("fill", "#fb8072");
             svg.append("path")
                 .data([dataset])
                 .attr("class", "line")
                 .attr("d", line8)
                 .attr("stroke", "black")
-                .attr("fill", "#fccde5");
+                .attr("fill", "#fb8072");
 
             svg.append("path")
                 .data([dataset])
                 .attr("class", "line")
                 .attr("d", line9)
                 .attr("stroke", "black")
-                .attr("fill", "#d9d9d9");
-
+                .attr("fill", "#80b1d3");
             svg.append("path")
                 .data([dataset])
                 .attr("class", "line")
                 .attr("d", line10)
                 .attr("stroke", "black")
-                .attr("fill", "#bc80bd");
+                .attr("fill", "#80b1d3");
 
-        // create a list of keys
-        var keys = ["Australia", "China", "France", "Germany", "Italy", "Japan", "Russia", "South Korea", "United Kingdom", "United States"]
+            svg.append("path")
+                .data([dataset])
+                .attr("class", "line")
+                .attr("d", line11)
+                .attr("stroke", "black")
+                .attr("fill", "#fdb462");
+            svg.append("path")
+                .data([dataset])
+                .attr("class", "line")
+                .attr("d", line12)
+                .attr("stroke", "black")
+                .attr("fill", "#fdb462");
+
+            svg.append("path")
+                .data([dataset])
+                .attr("class", "line")
+                .attr("d", line13)
+                .attr("stroke", "black")
+                .attr("fill", "#b3de69");
+            svg.append("path")
+                .data([dataset])
+                .attr("class", "line")
+                .attr("d", line14)
+                .attr("stroke", "black")
+                .attr("fill", "#b3de69");
+
+            svg.append("path")
+                .data([dataset])
+                .attr("class", "line")
+                .attr("d", line15)
+                .attr("stroke", "black")
+                .attr("fill", "#fccde5");
+            svg.append("path")
+                .data([dataset])
+                .attr("class", "line")
+                .attr("d", line16)
+                .attr("stroke", "black")
+                .attr("fill", "#fccde5");
+
+            svg.append("path")
+                .data([dataset])
+                .attr("class", "line")
+                .attr("d", line17)
+                .attr("stroke", "black")
+                .attr("fill", "#d9d9d9");
+            svg.append("path")
+                .data([dataset])
+                .attr("class", "line")
+                .attr("d", line18)
+                .attr("stroke", "black")
+                .attr("fill", "#d9d9d9");
+
+            svg.append("path")
+                .data([dataset])
+                .attr("class", "line")
+                .attr("d", line19)
+                .attr("stroke", "black")
+                .attr("fill", "#bc80bd");
+            svg.append("path")
+                .data([dataset])
+                .attr("class", "line")
+                .attr("d", line20)
+                .attr("stroke", "black")
+                .attr("fill", "#bc80bd");
 
         // Usually you have a color scale in your chart already
         var color = d3.scaleOrdinal()
           .domain(keys)
           .range(["#8dd3c7", "#ffffb3", "#bebada", "#fb8072", "#80b1d3", "#fdb462", "#b3de69", "#fccde5", "#d9d9d9", "#bc80bd"]);
-
-        // Add one dot in the legend for each name.
-        svg.selectAll("mydots")
-          .data(keys)
-          .enter()
-          .append("circle")
-            .attr("cx", 500)
-            .attr("cy", function(d,i){ return 50 + i*25}) // 100 is where the first dot appears. 25 is the distance between dots
-            .attr("r", 7)
-            .attr("stroke", "black")
-            .style("fill", function(d){ return color(d)})
-
-        // Add one dot in the legend for each name.
-        svg.selectAll("mylabels")
-          .data(keys)
-          .enter()
-          .append("text")
-            .attr("x", 520)
-            .attr("y", function(d,i){ return 50 + i*25}) // 100 is where the first dot appears. 25 is the distance between dots
-            .style("fill", "black")
-            .text(function(d){ return d})
-            .attr("text-anchor", "left")
-            .style("alignment-baseline", "middle")
-
 
 
 
