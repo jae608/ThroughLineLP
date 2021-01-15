@@ -49,9 +49,29 @@ import numpy as np
 #          [35, 91, 35, 44, 28, 38, 68, 30, 65, 104],   # 2012
 #          [29, 70, 42, 42, 28, 41, 56, 21, 67, 121]]  # 2016
 
-table = np.random.rand(10, 10)
-table = table.tolist()
-print(table)
+# table = np.random.rand(10, 10)
+# table = table.tolist()
+# print(table)
+
+
+# Function to read in olympics data
+# Reads data into passed in table
+def olympic_read(min_size):
+    table = []
+    # Read data from csv
+    with open('winter-olympic-medal-win.csv', mode='r') as Reader:
+        R = csv.reader(Reader, delimiter=',')
+        next(R)
+        for row in R:
+            my_row = row[1:16]  # Only read First 15 countries
+            for i in range(len(my_row)):
+                if my_row[i] == "0":
+                    my_row[i] = min_size
+                my_row[i] = float(my_row[i])
+            table.append(my_row)
+    print(table)
+    return table
+
 
 # Normalize Table size
 def normalize(table):
@@ -200,7 +220,9 @@ def to_Line(data):
     header = ["l1x", "l1y", "l2x", "l2y", "l3x", "l3y", "l4x", "l4y", "l5x", "l5y",
               "l6x", "l6y", "l7x", "l7y", "l8x", "l8y", "l9x", "l9y", "l10x", "l10y",
               "l11x", "l11y", "l12x", "l12y", "l13x", "l13y", "l14x", "l14y", "l15x", "l15y",
-              "l16x", "l16y", "l17x", "l17y", "l18x", "l18y", "l19x", "l19y", "l20x", "l20y"]
+              "l16x", "l16y", "l17x", "l17y", "l18x", "l18y", "l19x", "l19y", "l20x", "l20y",
+              "l21x", "l21y", "l22x", "l22y", "l23x", "l23y", "l24x", "l24y", "l25x", "l25y",
+              "l26x", "l26y", "l27x", "l27y", "l28x", "l28y", "l29x", "l29y", "l30x", "l30y"]
 
     # First Identify How many columns there are
     data = data[1:]
@@ -245,36 +267,30 @@ def to_Line(data):
 try:
 
     epsilon = 0
+    table = olympic_read(0.025)
+    time_limit = 180
 
     normalize(table)
-
     # Create a new model
     m = gp.Model("Solver")
-
     # Must do this so that our non-convex quadratic constraints can be used
     m.setParam(GRB.Param.NonConvex, 2)
-    m.Params.TimeLimit = 10.0
-
+    m.Params.TimeLimit = time_limit
     # Add the variables to our model
     add_errs(table, m)
     m.presolve()
-
     # Add the constraints to our model
     # Do it for both the linear and quadratic constraints separately
     addL_const(table, m, epsilon)
     m.presolve()
-
     # Now add the quadratic constraints
     addQ_const(table, m)
     m.presolve()
-
     # Lastly add the objective
     addObj(table, m)
     m.presolve()
-
     # Optimize our model
     m.optimize()
-
     # Display results
     print('Obj: %g' % m.objVal)
 
@@ -285,18 +301,15 @@ try:
     lengths = vars[:len(vars) // 2]
     heights = vars[len(vars) // 2:len(vars) // 2 + n_row]
     errors = vars[len(vars) // 2 + n_row:]
-
     # Construct data into an array to return. Each row represents the data for one rectangle
     # Aquire y offsets
     yoff = [0] * (n_col + (n_col - 1))
     for i in range(0, len(heights)):
         yoff.extend([heights[i].x + yoff[(n_col + (n_col - 1)) * i]] * (n_col + (n_col - 1)))
-
     # Aquire Heights
     h = []
     for val in heights:
         h.extend([val.x] * (n_col + (n_col - 1)))
-
     # Aquire lengths
     l = []
     for i in range(n_row):
@@ -305,7 +318,6 @@ try:
             if j == n_col - 1:
                 break
             l.append(errors[(n_col - 1) * i + j].x)
-
     # Aquire x offsets
     xoff = [0]
     for i in range(1, len(l)):
@@ -313,7 +325,6 @@ try:
             xoff.append(0)
         else:
             xoff.append(l[i - 1] + xoff[i - 1])
-
     # Aquire column number
     c = []
     for i in range(n_row):
@@ -322,7 +333,6 @@ try:
                 c.append(-1)
             else:
                 c.append(j % 20)
-
     # Build our data
     data = [['height', 'length', 'xoff', 'yoff', 'col']]
     for i in range((n_row * n_col) + (n_row * (n_col - 1))):
@@ -339,20 +349,12 @@ try:
         mosek_writer = csv.writer(mosekLP, delimiter=',')
         for row in data:
             mosek_writer.writerow(row)
-
     # Additional csv for better drawing
     res_mod = to_Line(data)
     with open('line_tab.csv', mode='w') as mosekLP:
         mosek_writer = csv.writer(mosekLP, delimiter=',')
         for row in res_mod:
             mosek_writer.writerow(row)
-
-    # # Display total error
-    # e_sum = 0
-    # for e in range(len(errors)):
-    #     i = e//(n_col-1)
-    #     e_sum = e_sum + errors[e].x * heights[i].x
-    # print("The Total Error Is: " + str(e_sum))
 
 except gp.GurobiError as e:
     print('Error code ' + str(e.errno) + ': ' + str(e))

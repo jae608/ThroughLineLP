@@ -1,12 +1,10 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>1992-2016 Olympics Medal Totals</title>
     <script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
 </head>
 <body>
-    <h3 style="padding-left: 50px;">1992-2016 Olympics Medal Totals</h3>
+    <h3 style="padding-left: 50px;">Curved Vis</h3>
     <div id='my_chart'></div>
 </body>
     <script type="text/javascript">
@@ -62,6 +60,26 @@
                 d.l19y = parseFloat(d.l19y);
                 d.l20x = parseFloat(d.l20x);
                 d.l20y = parseFloat(d.l20y);
+                d.l21x = parseFloat(d.l21x);
+                d.l21y = parseFloat(d.l21y);
+                d.l22x = parseFloat(d.l22x);
+                d.l22y = parseFloat(d.l22y);
+                d.l23x = parseFloat(d.l23x);
+                d.l23y = parseFloat(d.l23y);
+                d.l24x = parseFloat(d.l24x);
+                d.l24y = parseFloat(d.l24y);
+                d.l25x = parseFloat(d.l25x);
+                d.l25y = parseFloat(d.l25y);
+                d.l26x = parseFloat(d.l26x);
+                d.l26y = parseFloat(d.l26y);
+                d.l27x = parseFloat(d.l27x);
+                d.l27y = parseFloat(d.l27y);
+                d.l28x = parseFloat(d.l28x);
+                d.l28y = parseFloat(d.l28y);
+                d.l29x = parseFloat(d.l29x);
+                d.l29y = parseFloat(d.l29y);
+                d.l30x = parseFloat(d.l30x);
+                d.l30y = parseFloat(d.l30y);
 
             });
 
@@ -191,7 +209,62 @@
                 .x0(function(d) { return x(d.l19x); })
                 .y(function(d) { return y(d.l20y); });
 
-            // append the svg obgect to the body of the page
+            var line21 = d3.area()
+                .curve(d3.curveBasis)
+                .x1(function(d) { return x(d.l21x); })
+                .x0(function(d) { return x(d.l22x); })
+                .y(function(d) { return y(d.l21y); });
+            var line22 = d3.area()
+                .curve(d3.curveBasis)
+                .x1(function(d) { return x(d.l22x); })
+                .x0(function(d) { return x(d.l21x); })
+                .y(function(d) { return y(d.l22y); });
+
+            var line23 = d3.area()
+                .curve(d3.curveBasis)
+                .x1(function(d) { return x(d.l23x); })
+                .x0(function(d) { return x(d.l24x); })
+                .y(function(d) { return y(d.l23y); });
+            var line24 = d3.area()
+                .curve(d3.curveBasis)
+                .x1(function(d) { return x(d.l24x); })
+                .x0(function(d) { return x(d.l23x); })
+                .y(function(d) { return y(d.l24y); });
+
+            var line25 = d3.area()
+                .curve(d3.curveBasis)
+                .x1(function(d) { return x(d.l25x); })
+                .x0(function(d) { return x(d.l26x); })
+                .y(function(d) { return y(d.l25y); });
+            var line26 = d3.area()
+                .curve(d3.curveBasis)
+                .x1(function(d) { return x(d.l26x); })
+                .x0(function(d) { return x(d.l25x); })
+                .y(function(d) { return y(d.l26y); });
+
+            var line27 = d3.area()
+                .curve(d3.curveBasis)
+                .x1(function(d) { return x(d.l27x); })
+                .x0(function(d) { return x(d.l28x); })
+                .y(function(d) { return y(d.l27y); });
+            var line28 = d3.area()
+                .curve(d3.curveBasis)
+                .x1(function(d) { return x(d.l28x); })
+                .x0(function(d) { return x(d.l27x); })
+                .y(function(d) { return y(d.l28y); });
+
+            var line29 = d3.area()
+                .curve(d3.curveBasis)
+                .x1(function(d) { return x(d.l29x); })
+                .x0(function(d) { return x(d.l30x); })
+                .y(function(d) { return y(d.l29y); });
+            var line30 = d3.area()
+                .curve(d3.curveBasis)
+                .x1(function(d) { return x(d.l30x); })
+                .x0(function(d) { return x(d.l29x); })
+                .y(function(d) { return y(d.l30y); });
+
+            // append the svg object to the body of the page
             // appends a 'group' element to 'svg'
             // moves the 'group' element to the top left margin
             var svg = d3.select("body").append("svg")
@@ -332,12 +405,91 @@
                 .attr("stroke", "black")
                 .attr("fill", "#bc80bd");
 
-        // Usually you have a color scale in your chart already
-        var color = d3.scaleOrdinal()
-          .domain(keys)
-          .range(["#8dd3c7", "#ffffb3", "#bebada", "#fb8072", "#80b1d3", "#fdb462", "#b3de69", "#fccde5", "#d9d9d9", "#bc80bd"]);
+            svg.append("path")
+                .data([dataset])
+                .attr("class", "line")
+                .attr("d", line21)
+                .attr("stroke", "black")
+                .attr("fill", "#8dd3c7");
+            svg.append("path")
+                .data([dataset])
+                .attr("class", "line")
+                .attr("d", line22)
+                .attr("stroke", "black")
+                .attr("fill", "#8dd3c7");
 
+            svg.append("path")
+                .data([dataset])
+                .attr("class", "line")
+                .attr("d", line23)
+                .attr("stroke", "black")
+                .attr("fill", "#ffffb3");
+            svg.append("path")
+                .data([dataset])
+                .attr("class", "line")
+                .attr("d", line24)
+                .attr("stroke", "black")
+                .attr("fill", "#ffffb3");
 
+            svg.append("path")
+                .data([dataset])
+                .attr("class", "line")
+                .attr("d", line25)
+                .attr("stroke", "black")
+                .attr("fill", "#bebada");
+            svg.append("path")
+                .data([dataset])
+                .attr("class", "line")
+                .attr("d", line26)
+                .attr("stroke", "black")
+                .attr("fill", "#bebada");
+
+            svg.append("path")
+                .data([dataset])
+                .attr("class", "line")
+                .attr("d", line27)
+                .attr("stroke", "black")
+                .attr("fill", "#fb8072");
+            svg.append("path")
+                .data([dataset])
+                .attr("class", "line")
+                .attr("d", line28)
+                .attr("stroke", "black")
+                .attr("fill", "#fb8072");
+
+            svg.append("path")
+                .data([dataset])
+                .attr("class", "line")
+                .attr("d", line29)
+                .attr("stroke", "black")
+                .attr("fill", "#80b1d3");
+            svg.append("path")
+                .data([dataset])
+                .attr("class", "line")
+                .attr("d", line30)
+                .attr("stroke", "black")
+                .attr("fill", "#80b1d3");
+
+          //["#8dd3c7", "#ffffb3", "#bebada", "#fb8072", "#80b1d3", "#fdb462", "#b3de69", "#fccde5", "#d9d9d9", "#bc80bd"]
+
+            var lines = svg.append('g')
+                .selectAll("line")
+                .data(dataset)
+                .enter()
+                .append("line")
+                .attr("x1", 0)
+                .attr("y1", function(d){
+                    console.log(d.l1y)
+                    return y(d.l1y)
+                })
+                .attr("x2", function(d){
+                    return x(d.l30x)
+                })
+                .attr("y2", function(d){
+                    return y(d.l1y)
+                })
+                .attr("stroke", "black")
+                .style("opacity", 0.50)
 
 		}
 
