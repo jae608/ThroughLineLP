@@ -1,11 +1,12 @@
 import time as t
 import NxMLP as LP
 import random as rand
+import csv
 
 # Desired Population Size
 popsize = 500
 # Time to try and find best solution
-time_limit = 100
+time_limit = 1000
 
 
 # Functions we need
@@ -62,7 +63,7 @@ Our method of choice is to pick the heights which yielded rows with less total e
 """
 def Crossover(A, B):
     n_row = A[0][6]
-    n_col = A[0][7]*(A[0][7]-1)
+    n_col = A[0][7]+(A[0][7]-1)
     A = A[1:] # Trim off the header
     B = B[1:]
     heights = []
@@ -85,6 +86,9 @@ def Crossover(A, B):
             heights.append(A_row[0][0])
 
     # create and return our new individual with the specified heights
+    # normalize the heights
+    s = sum(heights)
+    heights = [h/s for h in heights]
     return LP.main(table, 0, h=heights)
 
 
@@ -94,7 +98,7 @@ Our method to mutate is to scale a random height to be the average of the others
 """
 def Mutate(individual):
     n_row = individual[0][6]
-    n_col = individual[0][7] * (individual[0][7] - 1)
+    n_col = individual[0][7] + (individual[0][7] - 1)
     heights = []
     individual = individual[1:]
     # We will take the rows with the smallest area error
@@ -106,6 +110,9 @@ def Mutate(individual):
     heights[a] = sum(heights)/len(heights)
 
     # create and return our new individual with the specified heights
+    # normalize the heights
+    s = sum(heights)
+    heights = [h / s for h in heights]
     return LP.main(table, 0, h=heights)
 
 
@@ -142,6 +149,22 @@ while True:
     # Replace old population
     P = Q
     # Check if we are done looping
-    if t.perf_counter() - time > time_limit or best == p_best:
-        print("A solution was found")
+    if t.perf_counter() - time > time_limit:
+        print("A solution was found- time limit reached")
         break
+    if best == p_best:
+        print("A solution was found- local optimum reached")
+        break
+
+# Write result to csv
+with open('mosek_LP.csv', mode='w') as mosekLP:
+    mosek_writer = csv.writer(mosekLP, delimiter=',')
+    for row in best:
+        mosek_writer.writerow(row)
+
+# Additional csv for better drawing
+res_mod = LP.to_Line(best)
+with open('line_tab.csv', mode='w') as mosekLP:
+    mosek_writer = csv.writer(mosekLP, delimiter=',')
+    for row in res_mod:
+        mosek_writer.writerow(row)
