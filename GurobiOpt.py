@@ -1,6 +1,7 @@
 import gurobipy as gp
 from gurobipy import GRB
 import csv
+import math
 import numpy as np
 
 #  It is assumed we can parse a csv file into an array of N rows and M columns
@@ -17,12 +18,12 @@ import numpy as np
 #          [6, 14, 9, 4, 3],
 #          [2, 3, 11, 10, 10],
 #          [7, 3, 3, 18, 5]]
-# table = [[10, 2, 12, 14, 4, 6],
-#          [3, 5, 1, 15, 19, 9],
-#          [8, 18, 1, 14, 17, 3],
-#          [13, 4, 14, 10, 2, 3],
-#          [8, 16, 20, 4, 1, 19],
-#          [15, 11, 7, 3, 17, 10]]
+table = [[10, 2, 12, 14, 4, 6],
+         [3, 5, 1, 15, 19, 9],
+         [8, 18, 1, 14, 17, 3],
+         [13, 4, 14, 10, 2, 3],
+         [8, 16, 20, 4, 1, 19],
+         [15, 11, 7, 3, 17, 10]]
 # table = [[50, 5, 2, 5, 2, 5],
 #          [5, 2, 5, 2, 5, 50],
 #          [50, 5, 2, 5, 2, 5],
@@ -69,7 +70,6 @@ def olympic_read(min_size):
                     my_row[i] = min_size
                 my_row[i] = float(my_row[i])
             table.append(my_row)
-    print(table)
     return table
 
 
@@ -267,7 +267,7 @@ def to_Line(data):
 try:
 
     epsilon = 0
-    table = olympic_read(0.025)
+    #table = olympic_read(0.025)
     time_limit = 180
 
     normalize(table)
