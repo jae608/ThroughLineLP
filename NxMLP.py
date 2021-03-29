@@ -33,7 +33,7 @@ def olympic_read(min_size):
         R = csv.reader(Reader, delimiter=',')
         next(R)
         for row in R:
-            my_row = row[1:11]  # Only read First 15 countries
+            my_row = row[1:16]  # Only read First 10 countries
             for i in range(len(my_row)):
                 if my_row[i] == "0":
                     my_row[i] = min_size
@@ -55,15 +55,34 @@ def normalize(table):
 
 
 """
-Return a list of heights for each row
+Return a list of heights for each row. The mode depends on how they are generated
+mode=None -> random (default)
+mode='Scale' -> Height proportional to sum of area in row
+mode='Uniform' -> Height same for each row
 """
-def getHeights(table):
+def getHeights(table, mode=None):
     # Generate a random height, which all sum to 1
-    a = np.random.random(len(table))
-    a /= a.sum()
+    if mode == 'Scale':
+        a = [sum(r) for r in table]
+    elif mode == 'Uniform':
+        a = [1/len(table) for r in table]
+    else:
+        print("hhhkhvuuccuccucuuyyucuycuycyuccyucuycuy"
+              ""
+              ""
+              ""
+              ""
+              ""
+              ""
+              ""
+              ""
+              ""
+              ""
+              ""
+              "")
+        a = np.random.random(len(table))
+        a /= a.sum()
     return a
-    # Old way
-    # return [sum(r) for r in table]
 
 
 """
@@ -197,7 +216,7 @@ def main(t, eps, h=None):
             n_row = len(table)
             n_col = len(table[0])
             if h is None:
-                heights = getHeights(table)
+                heights = getHeights(table, mode='Scale')
             else:
                 heights = h
             lengths = getLengths(table, heights)

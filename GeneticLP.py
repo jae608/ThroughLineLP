@@ -4,9 +4,9 @@ import random as rand
 import csv
 
 # Desired Population Size
-popsize = 500
+popsize = 100
 # Time to try and find best solution
-time_limit = 1000
+time_limit = 30
 
 
 # Functions we need
