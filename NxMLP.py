@@ -67,19 +67,6 @@ def getHeights(table, mode=None):
     elif mode == 'Uniform':
         a = [1/len(table) for r in table]
     else:
-        print("hhhkhvuuccuccucuuyyucuycuycyuccyucuycuy"
-              ""
-              ""
-              ""
-              ""
-              ""
-              ""
-              ""
-              ""
-              ""
-              ""
-              ""
-              "")
         a = np.random.random(len(table))
         a /= a.sum()
     return a
