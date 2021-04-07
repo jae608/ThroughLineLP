@@ -203,7 +203,7 @@ def main(t, eps, h=None):
             n_row = len(table)
             n_col = len(table[0])
             if h is None:
-                heights = getHeights(table, mode='Scale')
+                heights = getHeights(table, mode=None)
             else:
                 heights = h
             lengths = getLengths(table, heights)

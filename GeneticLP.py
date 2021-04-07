@@ -6,7 +6,7 @@ import csv
 # Desired Population Size
 popsize = 100
 # Time to try and find best solution
-time_limit = 600
+time_limit = 60
 
 
 # Functions we need
