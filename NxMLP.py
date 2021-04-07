@@ -17,12 +17,12 @@ import numpy as np
 #          [6, 14, 9, 4, 3],
 #          [2, 3, 11, 10, 10],
 #          [7, 3, 3, 18, 5]]
-# table = [[10, 2, 12, 14, 4, 6],
-#          [3, 5, 1, 15, 19, 9],
-#          [8, 18, 1, 14, 17, 3],
-#          [13, 4, 14, 10, 2, 3],
-#          [8, 16, 20, 4, 1, 19],
-#          [15, 11, 7, 3, 17, 10]]
+table = [[10, 2, 12, 14, 4, 6],
+         [3, 5, 1, 15, 19, 9],
+         [8, 18, 1, 14, 17, 3],
+         [13, 4, 14, 10, 2, 3],
+         [8, 16, 20, 4, 1, 19],
+         [15, 11, 7, 3, 17, 10]]
 
 # Function to read in olympics data
 # Reads data into passed in table
@@ -203,7 +203,7 @@ def main(t, eps, h=None):
             n_row = len(table)
             n_col = len(table[0])
             if h is None:
-                heights = getHeights(table, mode=None)
+                heights = getHeights(table, mode='Scale')
             else:
                 heights = h
             lengths = getLengths(table, heights)

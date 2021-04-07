@@ -256,7 +256,9 @@ def to_Line(data):
     header = ["l1x", "l1y", "l2x", "l2y", "l3x", "l3y", "l4x", "l4y", "l5x", "l5y",
               "l6x", "l6y", "l7x", "l7y", "l8x", "l8y", "l9x", "l9y", "l10x", "l10y",
               "l11x", "l11y", "l12x", "l12y", "l13x", "l13y", "l14x", "l14y", "l15x", "l15y",
-              "l16x", "l16y", "l17x", "l17y", "l18x", "l18y", "l19x", "l19y", "l20x", "l20y"]
+              "l16x", "l16y", "l17x", "l17y", "l18x", "l18y", "l19x", "l19y", "l20x", "l20y",
+              "l21x", "l21y", "l22x", "l22y", "l23x", "l23y", "l24x", "l24y", "l25x", "l25y",
+              "l26x", "l26y", "l27x", "l27y", "l28x", "l28y", "l29x", "l29y", "l30x", "l30y"]
 
     # First Identify How many columns there are
     data = data[1:]
@@ -304,7 +306,7 @@ def to_Line(data):
 
 
 epsilon = 0
-time_limit = 1200
+time_limit = 60
 top_to_bottom = True
 
 # Read in table
