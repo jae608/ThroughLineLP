@@ -11,10 +11,9 @@ EHLooped.py
   - The iteration will end when either the time limit expires or no excess area was removed compared to the previous iteration
   - this file reads in the table information from mosek_LP.csv and outputs an updated mosek_LP.csv, as well as for line_tab.csv
   - There are 3 adjustable parameters:
-      i) epislon (306)- this is the minimum amount of intersect between rectanlges from the same column. 
-         An epsilon of 0 means the rectanlges will at a minimum touch 'corner-to-corner'. It is recommended to keep this parameter at 0
-     ii) time_limit (307)- the maximum amount, in seconds, for which the ErrorHeuristic will run
-    iii) top_to_bottom (308)- if true, the heuristic will be aplied in raster order. If false, it will be applied in reverse raster order
+      - epislon (306)- this is the minimum amount of intersect between rectanlges from the same column. An epsilon of 0 means the rectanlges will at a minimum touch 'corner-to-corner'. It is recommended to keep this parameter at 0
+      - time_limit (307)- the maximum amount, in seconds, for which the ErrorHeuristic will run
+      - top_to_bottom (308)- if true, the heuristic will be aplied in raster order. If false, it will be applied in reverse raster order
     
 ErrorHeuristic.py
   - this file performs one iteration of the hill climbing heuristic.
@@ -27,9 +26,8 @@ GeneticLP.py
   - The heights, once calculated are used to create a linear programming solution with them, which are written to mosek_LP.csv and line_tab.csv
   -NOTE: be sure to set "mode=None" on line 206 of NxMLP.py beofre using the genetic algorithm
   - There are 2 adjustable parameters:
-      i) popsize (7)- this defines the population size for one generation
-     ii) time_limit (9)- sets a time limit for how long the genetic algorithm can run. 
-         Note that if the time limit is reached while creating the next generation, it may take a little extra time beofre the algorithm terminates.
+      - popsize (7)- this defines the population size for one generation
+      - time_limit (9)- sets a time limit for how long the genetic algorithm can run. Note that if the time limit is reached while creating the next generation, it may take a little extra time beofre the algorithm terminates.
          
 GurobiOpt.py
   - 
