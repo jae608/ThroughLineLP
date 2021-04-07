@@ -2,6 +2,7 @@
 PLEASE READ THIS AS A "HOW TO USE" FOR THE REPOSITORY
 
 ThroughLineLP is a code base for projects related to generating StreamTables. Here, I will do through each file and what its purpose is.
+For CMPT 400, the files 3x3 Work and NxMLP.py existed before the start of this term and can be considered background work.
 
 3x3 Work
   - This is a folder which contains early work on small examples. This folder and all files inside of it can be irgnored
@@ -68,9 +69,34 @@ OlympicVis.html
   - Note for exceptionally wide tables the visualization may not all be visible
 
 Visualize.html
-  - This file visualises the output of the mosek_LP.csv as a StreamTable
+  - This file visualises the output of the mosek_LP.csv as a StreamTable with minor aesthetic smoothing
   - As this is an html file, be sure to open and run it in your browser properly (and make sure the .csv file can be found by it)
   - Note for exceptionally wide tables the visualization may not all be visible
 
 winter-olympic-mdeal-win.csv
   - This file is used as the source of the real world olympic datasets
+
+# Example Use 1:
+- I define the following dataset in NxMLP.py table = [[10, 2, 12, 14, 4, 6],
+          [3, 5, 1, 15, 19, 9],
+         [8, 18, 1, 14, 17, 3],
+         [13, 4, 14, 10, 2, 3],
+         [8, 16, 20, 4, 1, 19],
+         [15, 11, 7, 3, 17, 10]]
+- I set mode='Scale' and comment out line 374
+- I run the program, which creates output in the csv files
+- I run Visualize.html at see the table output
+- Next, I run EHLooped.py with epsilon=0, time_limit=60 and top_to_bottom=True
+- I then run Visualize.html to see the updated table output
+
+# Example Use 2:
+- I uncomment line 240 in GurobiOpt.py and run it with a time_limit=120 and epsilon=0
+- I run OlympicVis.html to see the StreamTable with lots of smoothing
+- I then change the size of the slice on line 37 to 10 and re-run GurobiOpt.py
+- I run OlympicVis again and compare the results
+
+# Example Use 3:
+- Using the table form example 1, I set mode='Uniform' and run NxMLP.py
+- I visualise the output in Visualize.html
+- Then, I set mode=None and run GeneticLP.py with popsize=100 and time_limit=180
+- I visualise this new output in Visualize.html and compare their resulting StreamTables
