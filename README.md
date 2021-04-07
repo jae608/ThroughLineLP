@@ -30,6 +30,6 @@ GeneticLP.py
       - time_limit (9)- sets a time limit for how long the genetic algorithm can run. Note that if the time limit is reached while creating the next generation, it may take a little extra time beofre the algorithm terminates.
          
 GurobiOpt.py
-  - 
+  - This 
   
 
